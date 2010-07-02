@@ -1,0 +1,30 @@
+<project name="tests-seam-jars" xmlns:artifact="urn:maven-artifact-ant">
+
+   <property name="seam_version" value="2.2.2.EAP5"/>
+
+   <target name="_jars-seam">
+   	
+   	  <typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant" classpathref="apache.maven.ant.tasks.classpath" />
+   	
+      <mkdir dir="${build.lib}"/>
+
+      <artifact:dependencies filesetId="examples.fileset" versionsId="examples.versions">
+          <dependency groupId="org.jboss.seam.examples" artifactId="jboss-seam-booking" version="${seam_version}" type="ear"/>
+      	  <dependency groupId="org.jboss.seam.examples" artifactId="jboss-seam-booking" version="${seam_version}" type="xml" classifier="ds"/>
+      	  <dependency groupId="org.jboss.seam.examples" artifactId="jboss-seam-dvdstore" version="${seam_version}" type="ear"/>
+      	  <dependency groupId="org.jboss.seam.examples" artifactId="jboss-seam-dvdstore" version="${seam_version}" type="xml" classifier="ds"/>
+      	  <dependency groupId="org.jboss.seam.examples" artifactId="jboss-seam-numberguess" version="${seam_version}" type="ear"/>
+      	  <dependency groupId="org.jboss.seam.examples" artifactId="jboss-seam-jpa" version="${seam_version}" type="war"/>
+      	  <remoterepository id="prod-repository.jboss.org" url="http://repository.jboss.org/maven2-brew"/>
+      	  <remoterepository id="repository.jboss.org" url="http://repository.jboss.org/maven2"/>
+      	  <remoterepository id="snapshots.jboss.org" url="http://snapshots.jboss.org/maven2"/>
+      </artifact:dependencies>
+   	
+   	  <copy todir="${build.lib}">
+   		  <fileset refid="examples.fileset" />
+   		  <mapper classpathref="apache.maven.ant.tasks.classpath" classname="org.apache.maven.artifact.ant.VersionMapper" from="${examples.versions}" to="flatten" />
+   	  </copy>
+   	
+   </target>
+   	  	
+</project>

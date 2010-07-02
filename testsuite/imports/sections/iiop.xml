@@ -1,0 +1,59 @@
+<project name="tests-iiop-jars">
+   <!-- iiop parameter passing test -->
+   <target name="_jars-iiop">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build iioptest.jar -->
+      <jar destfile="${build.lib}/iioptest.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/iiop/interfaces/**"/>
+            <include name="org/jboss/test/iiop/util/**"/>
+            <include name="org/jboss/test/iiop/test/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/iiop">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+      
+      <!-- build iiop.jar -->
+      <jar destfile="${build.lib}/iiop.jar">
+         <metainf dir="${build.resources}/iiop/META-INF"/>
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/iiop/interfaces/**"/>
+            <include name="org/jboss/test/iiop/util/**"/>
+            <include name="org/jboss/test/iiop/ejb/**"/>
+         </fileset>
+      </jar>
+   </target>
+   
+   <!-- iiop timing test -->
+   <target name="_jars-iiopperf">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build iiopperftest.jar -->
+      <jar destfile="${build.lib}/iiopperftest.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/iiopperf/interfaces/**"/>
+            <include name="org/jboss/test/iiopperf/test/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/iiopperf">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+      
+      <!-- build iiopperf.jar -->
+      <jar destfile="${build.lib}/iiopperf.jar">
+         <metainf dir="${build.resources}/iiopperf/META-INF"/>
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/iiopperf/interfaces/**"/>
+            <include name="org/jboss/test/iiopperf/ejb/**"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

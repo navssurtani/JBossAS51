@@ -1,0 +1,14 @@
+<project name="tests-ejb-jars">
+   <target name="_jars-ejbproxy">
+      <mkdir dir="${build.lib}"/>
+      
+      <jar destfile="${build.lib}/ejbproxy-test.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/ejb/proxy/beans/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/ejb/proxy/">
+            <include name="META-INF/*.*"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

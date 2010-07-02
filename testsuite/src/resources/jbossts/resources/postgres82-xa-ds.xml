@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources>
+  <xa-datasource>
+    <jndi-name>CrashRecoveryDS</jndi-name>
+    <track-connection-by-tx>true</track-connection-by-tx> 
+    <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class>
+    <xa-datasource-property name="ServerName">vmg01.mw.lab.eng.bos.redhat.com</xa-datasource-property>
+    <xa-datasource-property name="PortNumber">5432</xa-datasource-property>
+    <xa-datasource-property name="DatabaseName">crashrec</xa-datasource-property>
+    @CREDENTIALS@
+  </xa-datasource>
+</datasources>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Red Hat, Inc.
+  ~ Red Hat licenses this file to you under the Apache License, version
+  ~ 2.0 (the "License"); you may not use this file except in compliance
+  ~ with the License.  You may obtain a copy of the License at
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  ~ implied.  See the License for the specific language governing
+  ~ permissions and limitations under the License.
+  -->
+<project default="install" name="HornetQ Installer" basedir=".">
+
+   <property name="jboss_home" value="../../"/>
+   <property name="lib.dir" value="lib"/>
+   <property name="resources.dir" value="resources"/>
+
+   <target name="install" depends="removeCommon, removeClient, addCommon, addClient">
+
+      <antcall target="removeConfig">
+         <param name="CONFIG" value="standard"/>
+      </antcall>
+      <antcall target="createConfig">
+         <param name="CONFIG" value="standard"/>
+         <param name="CONFIG_TYPE" value="non-clustered"/>
+      </antcall>
+
+      <antcall target="removeConfig">
+         <param name="CONFIG" value="default"/>
+      </antcall>
+      <antcall target="createConfig">
+         <param name="CONFIG" value="default"/>
+         <param name="CONFIG_TYPE" value="non-clustered"/>
+      </antcall>
+
+      <antcall target="removeConfig">
+         <param name="CONFIG" value="all"/>
+      </antcall>
+      <antcall target="createConfig">
+         <param name="CONFIG" value="all"/>
+         <param name="CONFIG_TYPE" value="clustered"/>
+      </antcall>
+
+   </target>
+
+   <target name="removeCommon">
+      <echo>Removing Common JBoss Messaging Components</echo>
+      <delete file="${jboss_home}/common/lib/jboss-messaging.jar"/>
+      <delete file="${jboss_home}/common/lib/jboss-messaging-int.jar"/>
+   </target>
+   
+   <target  name="addCommon">
+      <echo>Adding HornetQ common components</echo>
+      <copy todir="${jboss_home}/common/lib">
+         <fileset dir="${lib.dir}">
+            <include name="hornetq-bootstrap.jar"/>
+            <include name="hornetq-core.jar"/>
+            <include name="hornetq-jboss-as-integration.jar"/>
+            <include name="hornetq-jms.jar"/>
+            <include name="hornetq-logging.jar"/>
+            <include name="hornetq-int.jar"/>
+            <include name="netty.jar"/>
+         </fileset>
+      </copy>
+   </target>
+
+   <target name="removeClient">
+      <echo>Removing JBoss Messaging client components</echo>
+      <delete file="${jboss_home}/client/jboss-messaging-client.jar"/>
+   </target>
+
+   <target  name="addClient">
+      <echo>Adding HornetQ client components</echo>
+      <copy todir="${jboss_home}/client">
+         <fileset dir="${lib.dir}">
+            <include name="hornetq-core-client.jar"/>
+            <include name="hornetq-jms-client.jar"/>
+            <include name="jbossws-hornetq.jar"/>
+         </fileset>
+      </copy>
+   </target>
+
+   <target name="removeConfig">
+      <property name="config" value="${CONFIG}"/>
+      <echo>Removing JBoss Messaging from config: ${config}</echo>
+      <delete dir="${jboss_home}/server/${config}/deploy/messaging"/>
+      <delete file="${jboss_home}/server/${config}/deployers/messaging-definitions-jboss-beans.xml"/>
+      <delete file="${jboss_home}/server/${config}/conf/props/messaging-roles.properties"/>
+      <delete file="${jboss_home}/server/${config}/conf/props/messaging-users.properties"/>
+      <delete file="${jboss_home}/server/${config}/deploy/jms-ra.rar"/>
+   </target>
+
+   <target name="createConfig">
+      <property name="config" value="${CONFIG}"/>
+      <property name="config_type" value="${CONFIG_TYPE}"/>
+      <echo>adding HornetQ components to ${config}</echo>
+      <copy todir="${jboss_home}/server/${config}/deployers/" file="${resources.dir}/ejb-deployer-jboss-beans.xml" overwrite="true"/>
+      <copy todir="${jboss_home}/server/${config}/conf/props/" file="${resources.dir}/hornetq-roles.properties" overwrite="true"/>
+      <copy todir="${jboss_home}/server/${config}/conf/props/" file="${resources.dir}/hornetq-users.properties" overwrite="true"/>
+      <copy todir="${jboss_home}/server/${config}/conf/" file="${resources.dir}/login-config.xml" overwrite="true"/>
+      <copy todir="${jboss_home}/server/${config}/conf" file="${resources.dir}/jbossts-properties.xml" overwrite="true"/>
+      <mkdir dir="${jboss_home}/server/${config}/deploy/hornetq"/>
+      <copy todir="${jboss_home}/server/${config}/deploy/hornetq" file="${resources.dir}/jboss-as-6/${config_type}/hornetq-configuration.xml" overwrite="true"/>
+      <copy todir="${jboss_home}/server/${config}/deploy/hornetq" file="${resources.dir}/jboss-as-6/${config_type}/hornetq-jboss-beans.xml" overwrite="true"/>
+      <copy todir="${jboss_home}/server/${config}/deploy/hornetq" file="${resources.dir}/jboss-as-6/${config_type}/hornetq-jms.xml" overwrite="true"/>
+      <copy todir="${jboss_home}/server/${config}/deploy/hornetq" file="${resources.dir}/jboss-as-6/${config_type}/jms-ds.xml" overwrite="true"/>
+      <copy todir="${jboss_home}/server/${config}/deployers/" file="${resources.dir}/hornetq-deployers-jboss-beans.xml" overwrite="true"/>
+      <mkdir dir="${jboss_home}/server/${config}/deploy/jms-ra.rar"/>
+      <mkdir dir="${jboss_home}/server/${config}/deploy/jms-ra.rar/META-INF"/>
+      <copy todir="${jboss_home}/server/${config}/deploy/jms-ra.rar/" file="${lib.dir}/hornetq-ra.jar" overwrite="true"/>
+      <copy todir="${jboss_home}/server/${config}/deploy/jms-ra.rar/META-INF" file="${resources.dir}/ra.xml" overwrite="true"/>
+      <copy todir="${jboss_home}/server/${config}/deployers/jbossws.deployer" file="${lib.dir}/jbossws-hornetq.jar" overwrite="true"/>
+   </target>
+</project>
