@@ -60,6 +60,7 @@ import org.jboss.security.SecurityDomain;
 import org.jboss.security.Util;
 import org.jboss.security.auth.callback.JBossCallbackHandler; 
 import org.jboss.security.integration.JNDIBasedSecurityManagement;
+import org.jboss.security.integration.SecurityConstantsBridge;
 
 /**
  * The JaasSecurityDomain is an extension of JaasSecurityManager that addes the notion of a KeyStore, and JSSE
@@ -177,7 +178,7 @@ public class JaasSecurityDomain extends JaasSecurityManager implements SecurityD
    private String trustStoreProviderArgument;
 
    /** Specify the SecurityManagement instance */
-   private ISecurityManagement securityManagement = new JNDIBasedSecurityManagement();
+   private ISecurityManagement securityManagement = SecurityConstantsBridge.getSecurityManagement();
 
    /**
     * Creates a default JaasSecurityDomain for with a securityDomain name of 'other'.

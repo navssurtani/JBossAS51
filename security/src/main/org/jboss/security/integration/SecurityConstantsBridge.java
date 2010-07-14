@@ -36,4 +36,16 @@ public class SecurityConstantsBridge
    public static int defaultCacheResolution = 60;
    /** Frequency of the thread cleaning the authentication cache of expired entries */
    public static int defaultCacheFlushPeriod = 60*60;
+
+   private static JNDIBasedSecurityManagement securityManagement;
+
+   public static JNDIBasedSecurityManagement getSecurityManagement()
+   {
+      return securityManagement;
+   }
+
+   public void setSecurityManagement(JNDIBasedSecurityManagement securityManagement)
+   {
+      this.securityManagement = securityManagement;
+   }
 }

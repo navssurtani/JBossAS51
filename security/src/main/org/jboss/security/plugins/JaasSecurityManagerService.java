@@ -49,6 +49,7 @@ import javax.naming.Reference;
 import javax.naming.StringRefAddr;
 import javax.naming.spi.ObjectFactory;
 import javax.security.auth.Subject;
+import javax.security.auth.callback.CallbackHandler;
 import javax.security.jacc.PolicyContext;
 
 import org.jboss.logging.Logger;
@@ -127,6 +128,8 @@ public class JaasSecurityManagerService
    /** Frequency of the thread cleaning the authentication cache of expired entries */
    private static int defaultCacheFlushPeriod = 60*60;
 
+   private static JNDIBasedSecurityManagement securityManagement = SecurityConstantsBridge.getSecurityManagement();
+
    static
    {
       // Get a log interface, required for some statics below
@@ -160,7 +163,7 @@ public class JaasSecurityManagerService
       throws ClassNotFoundException, ClassCastException
    {
       securityMgrClassName = className;
-      ClassLoader loader = Thread.currentThread().getContextClassLoader();
+      ClassLoader loader = getContextClassLoader();
       securityMgrClass = loader.loadClass(securityMgrClassName);
       if( AuthenticationManager.class.isAssignableFrom(securityMgrClass) == false )
          throw new ClassCastException(securityMgrClass+" does not implement "+AuthenticationManager.class);
@@ -173,7 +176,7 @@ public class JaasSecurityManagerService
       throws ClassNotFoundException
    {
       securityProxyFactoryClassName = className;
-      ClassLoader loader = Thread.currentThread().getContextClassLoader();
+      ClassLoader loader = getContextClassLoader();
       securityProxyFactoryClass = loader.loadClass(securityProxyFactoryClassName);
    } 
 
@@ -192,7 +195,7 @@ public class JaasSecurityManagerService
       throws ClassNotFoundException
    {
       callbackHandlerClassName = className;
-      ClassLoader loader = Thread.currentThread().getContextClassLoader();
+      ClassLoader loader = getContextClassLoader();
       callbackHandlerClass = loader.loadClass(callbackHandlerClassName);
    }
 
@@ -496,7 +499,14 @@ public class JaasSecurityManagerService
                return null;
             }
          });
+         CallbackHandler callbackHandler = null;
+         callbackHandler = (CallbackHandler) callbackHandlerClass.newInstance();
+         if (callbackHandler != null)
+            securityManagement.setCallBackHandler(callbackHandler);
       }
+      
+      // Set AuthenticationManager class
+      securityManagement.setAuthenticationMgrClass(securityMgrClassName);
 
       // Register the Principal property editor
       PropertyEditorManager.registerEditor(Principal.class, PrincipalEditor.class);
@@ -763,5 +773,16 @@ public class JaasSecurityManagerService
          cachePolicy.start();
          return cachePolicy;
       }
+   }
+
+   static ClassLoader getContextClassLoader()
+   {
+      return AccessController.doPrivileged(new PrivilegedAction<ClassLoader>()
+      {
+         public ClassLoader run()
+         {
+            return Thread.currentThread().getContextClassLoader();
+         }
+      });
    }
 }

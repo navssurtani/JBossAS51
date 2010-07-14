@@ -3,6 +3,7 @@
   <!-- Make sure we have the right version of Ant -->
   <property name="buildmagic.ant16.baseversion" value="1.6"/>
   <property name="buildmagic.ant17.baseversion" value="1.7"/>
+  <property name="buildmagic.ant18.baseversion" value="1.8"/>
 
   <!--
      | Add new conditions for other supported Ant versions when they
@@ -15,6 +16,8 @@
 	        substring="Ant version ${buildmagic.ant16.baseversion}"/>
       <contains string="${ant.version}"
 	        substring="Ant version ${buildmagic.ant17.baseversion}"/>
+      <contains string="${ant.version}"
+	        substring="Ant version ${buildmagic.ant18.baseversion}"/>
     </or>
   </condition>
 

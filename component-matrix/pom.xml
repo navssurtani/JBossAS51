@@ -43,7 +43,7 @@
     <version.jboss.messaging>1.4.6.GA_SP1</version.jboss.messaging>
     <version.hornetq>2.1.1.Final</version.hornetq>
     <version.jboss.web>2.1.8.GA</version.jboss.web>
-    <version.jgroups>2.6.15.GA</version.jgroups>
+    <version.jgroups>2.6.16.GA</version.jgroups>
     <version.junit>3.8.2</version.junit>
     <version.org.hibernate.annotations>3.4.0.GA_CP02</version.org.hibernate.annotations>
     <version.org.hibernate.commons.annotations>3.1.0.GA</version.org.hibernate.commons.annotations>
@@ -79,7 +79,7 @@
     <version.org.jboss.microcontainer>2.0.10.GA</version.org.jboss.microcontainer>
     <version.org.jboss.naming>5.0.3.GA</version.org.jboss.naming>
     <version.org.jboss.reflect>2.0.3.GA</version.org.jboss.reflect>
-    <version.org.jboss.remoting>2.5.2.SP3</version.org.jboss.remoting>
+    <version.org.jboss.remoting>2.5.3</version.org.jboss.remoting>
     <version.org.jboss.security>2.0.4.SP4</version.org.jboss.security>
     <version.org.jboss.security.negotiation>2.0.3.SP3</version.org.jboss.security.negotiation>
     <version.org.jboss.threads>1.0.0.GA</version.org.jboss.threads>

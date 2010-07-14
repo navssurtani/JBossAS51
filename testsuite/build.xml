@@ -579,12 +579,12 @@
       <!-- path refid="jboss.profileservice.classpath"/ -->
       <pathelement path="${jboss.dist.common.lib}/jboss-profileservice.jar" />
       <!-- path refid="jboss.jboss.security.spi.classpath"/ -->
-      <pathelement path="${jboss.dist.client}/jboss-security-spi.jar" />
+      <pathelement path="${jboss.dist.lib}/jboss-security-spi.jar" />
       <!-- jbosssx.jar  -->
       <!-- path refid="jboss.jbosssx.classpath"/ -->
-      <pathelement path="${jboss.dist.common.lib}/jbosssx.jar" />
+      <pathelement path="${jboss.dist.lib}/jbosssx.jar" />
       <!-- path refid="jboss.security.int.classpath"/ -->
-      <pathelement path="${jboss.dist.common.lib}/jbosssx-server.jar" />
+      <pathelement path="${jboss.dist.lib}/jbosssx-server.jar" />
       <!-- path refid="jboss.server.classpath"/ -->
       <pathelement path="${jboss.dist.common.lib}/jboss.jar" />
       <pathelement path="${jboss.dist.common.lib}/jmx-adaptor-plugin.jar" />

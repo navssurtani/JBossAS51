@@ -25,24 +25,6 @@
         <property name="passwordManagement"><inject bean="JBossSecurityPasswordMaskManagement"/></property>
    </lifecycle-configure>
   
-  <lifecycle-create xmlns="urn:jboss:aop-beans:1.0"
-        name="PasswordCreateDestroyAdvice"
-        class="org.jboss.security.integration.password.PasswordLifecycleCallback"
-        classes="@org.jboss.security.integration.password.Password"
-        manager-bean="AspectManager"
-        manager-property="aspectManager">
-        <property name="passwordManagement"><inject bean="JBossSecurityPasswordMaskManagement"/></property>
-  </lifecycle-create>
-
-  <lifecycle-install xmlns="urn:jboss:aop-beans:1.0"
-       name="PasswordStartStopAdvice"
-       class="org.jboss.security.integration.password.PasswordLifecycleCallback"
-       classes="@org.jboss.security.integration.password.Password"
-       manager-bean="AspectManager"
-       manager-property="aspectManager">
-       <property name="passwordManagement"><inject bean="JBossSecurityPasswordMaskManagement"/></property>
-   </lifecycle-install>
-
    <!--  Establish the basic XML Based Configuration-->
    <bean name="XMLLoginConfig" class="org.jboss.security.auth.login.XMLLoginConfig">
       <property name="configResource">login-config.xml</property>
@@ -56,10 +38,6 @@
    <!-- JNDI Context legacy establishment of java:/jaas/securityDomain -->
    <bean name="JBossSecurityJNDIContextEstablishment"
       class="org.jboss.security.integration.JNDIContextEstablishment"/> 
-
-   <!-- JNDI Based Security Management -->
-   <bean name="JNDIBasedSecurityManagement"
-      class="org.jboss.security.integration.JNDIBasedSecurityManagement"/> 
 
    <!-- Instance of JBoss Security Subject Factory -->
    <bean name="JBossSecuritySubjectFactory"

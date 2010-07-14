@@ -21,6 +21,7 @@
  */
 package org.jboss.security.auth;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -34,7 +35,7 @@ import org.jboss.util.TimedCachePolicy;
  * @author <a href="mmoyses@redhat.com">Marcus Moyses</a>
  * @version $Revision: 1 $
  */
-public class AuthenticationTimedCachePolicy extends TimedCachePolicy
+public class AuthenticationTimedCachePolicy extends TimedCachePolicy implements Serializable
 {
    public AuthenticationTimedCachePolicy(int defaultCacheTimeout, boolean b, int defaultCacheResolution)
    {

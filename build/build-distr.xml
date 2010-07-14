@@ -981,8 +981,8 @@
     <property name="_module.output" override="true" value="${project.root}/${_module.name}/output"/>
 
     <!-- Copy the generated libraries -->
-    <mkdir dir="${install.all.lib}"/>
-    <copy todir="${install.all.lib}" filtering="no">
+    <mkdir dir="${install.lib}"/>
+    <copy todir="${install.lib}" filtering="no">
       <fileset dir="${_module.output}/lib">
         <include name="jbosssx-server.jar"/>
       </fileset>
@@ -2008,12 +2008,6 @@
       <fileset dir="${jboss.jboss.negotiation.lib}">
         <include name="jboss-negotiation.jar"/>
       </fileset>      
-      <fileset dir="${jboss.jboss.security.spi.lib}">
-        <include name="jboss-security-spi.jar"/>
-      </fileset>
-      <fileset dir="${jboss.jbosssx.lib}">
-        <include name="jbosssx.jar"/>
-      </fileset>      
       <fileset dir="${jboss.security.lib}">
         <include name="jbossxacml.jar"/>
       </fileset>
@@ -2106,6 +2100,15 @@
       </fileset>
       <fileset dir="${woodstox.woodstox.lib}">
         <include name="wstx.jar"/>
+      </fileset>
+      <fileset dir="${jboss.jboss.security.spi.lib}">
+        <include name="jboss-security-spi.jar"/>
+      </fileset>
+      <fileset dir="${jboss.jbosssx.lib}">
+        <include name="jbosssx.jar"/>
+      </fileset>
+      <fileset dir="${jboss.jboss.javaee.lib}">
+        <include name="jboss-javaee.jar"/>
       </fileset>
     </copy>
     
@@ -2262,9 +2265,6 @@
       </fileset>
       <fileset dir="${jboss.jboss.jaspi.api.lib}">
         <include name="jboss-jaspi-api.jar"/>
-      </fileset>
-      <fileset dir="${jboss.jboss.javaee.lib}">
-        <include name="jboss-javaee.jar"/>
       </fileset>
       <fileset dir="${jboss.jnpserver.lib}">
         <include name="jnpserver.jar"/>

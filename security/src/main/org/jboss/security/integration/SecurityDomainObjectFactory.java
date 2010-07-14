@@ -51,7 +51,7 @@ import org.jboss.security.plugins.SecurityDomainContext;
  */
 public class SecurityDomainObjectFactory implements InvocationHandler, ObjectFactory
 {
-   private JNDIBasedSecurityManagement securityManagement = new JNDIBasedSecurityManagement();
+   private JNDIBasedSecurityManagement securityManagement = SecurityConstantsBridge.getSecurityManagement();
    
    public void setSecurityManagement(JNDIBasedSecurityManagement sm)
    {

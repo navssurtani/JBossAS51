@@ -231,6 +231,7 @@ public class JNDIBasedSecurityManagement implements ISecurityManagement
    public void setAuthenticationMgrClass(String authenticationMgrClass)
    {
       this.authenticationMgrClass = authenticationMgrClass;
+      securityMgrMap.clear();
    }
 
    @ManagementProperty(use = {ViewUse.CONFIGURATION}, 
@@ -364,19 +365,16 @@ public class JNDIBasedSecurityManagement implements ISecurityManagement
    {   
       log.debug("Creating SDC for domain="+securityDomain);
       AuthenticationManager am = createAuthenticationManager(securityDomain);
-      if(cachePolicy == null)
-      {
-         cachePolicy = createDefaultCachePolicy();
-      }
+      CachePolicy cache = createDefaultCachePolicy();
       //Set security cache if the auth manager implementation supports it
-      setSecurityDomainCache(am, cachePolicy);
+      setSecurityDomainCache(am, cache);
       //Set DeepCopySubject option if supported
       if(SecurityConfiguration.isDeepCopySubjectMode())
       {
         setDeepCopySubjectMode(am);  
       }
       
-      SecurityDomainContext securityDomainContext = new SecurityDomainContext(am, cachePolicy); 
+      SecurityDomainContext securityDomainContext = new SecurityDomainContext(am, cache); 
       
       securityDomainContext.setAuthorizationManager(createAuthorizationManager(securityDomain));
       securityDomainContext.setAuditMgr(createAuditManager(securityDomain));

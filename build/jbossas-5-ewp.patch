@@ -38,18 +38,18 @@
  #
 -product.name=JBoss EAP Admin Console
 +product.name=JBoss EWP Admin Console
- product.version=1.3.2.GA
- product.buildNumber=784
- product.copyright=&copy; 2002-2009 Red Hat Middleware, LLC.  All rights reserved.  JBoss is a registered trademark of Red Hat, Inc.
+ product.version=1.3.4.CR1
+ product.buildNumber=946
+ product.copyright=&copy; 2002-2010 Red Hat Middleware, LLC.  All rights reserved.  JBoss is a registered trademark of Red Hat, Inc.
  
 -default.windowTitle=JBoss EAP Admin Console
 +default.windowTitle=JBoss EWP Admin Console
- #default.header=Embedded Jopr Core
+ #default.header=Embedded Jopr
  default.breadcrumb=default breadcrumb
  
 --- server/web/deploy/admin-console.war/META-INF/maven/org.jboss.jopr/jopr-embedded-jbas5/pom.xml.orig	2010-01-22 09:39:57.000000000 -0500
 +++ server/web/deploy/admin-console.war/META-INF/maven/org.jboss.jopr/jopr-embedded-jbas5/pom.xml	2010-01-22 09:39:19.000000000 -0500
-@@ -22,7 +22,7 @@
+@@ -23,7 +23,7 @@
          <warDir>${basedir}/target/${project.build.finalName}</warDir>
          <warFile>${warDir}.war</warFile>
          <contextRoot>admin-console</contextRoot>

@@ -843,6 +843,11 @@ Please ensure that build.properties exists in the build dir of the checkout tree
     <delete dir="${install.default}/deployers/bsh.deployer"/>	
     <delete dir="${install.production}/deployers/bsh.deployer"/>	
 
+    <delete dir="${install.default}/conf/props/messaging-roles.properties"/>	
+    <delete dir="${install.default}/conf/props/messaging-users.properties"/>	
+    <delete dir="${install.production}/conf/props/messaging-roles.properties"/>	
+    <delete dir="${install.production}/conf/props/messaging-users.properties"/>	
+
     <!-- delete examples that make no sense for EWP (JBPAPP-3570) -->
     <delete dir="${install.examples}/jms"/>	
     <delete dir="${install.examples}/jmx/jmx-remoting.sar"/>	
@@ -997,6 +1002,7 @@ Please ensure that build.properties exists in the build dir of the checkout tree
         <include name="bootstrap/jmx.xml"/>
         <include name="bootstrap/deployers.xml"/>
         <include name="bootstrap/profile.xml"/>
+        <include name="bootstrap/security.xml"/>
         <include name="xmdesc/NamingBean-xmbean.xml"/>
         <include name="xmdesc/NamingService-xmbean.xml"/>
         <include name="xmdesc/NamingProviderURLWriter-xmbean.xml"/>
@@ -1090,9 +1096,6 @@ Please ensure that build.properties exists in the build dir of the checkout tree
         <include name="deploy/cluster/jboss-cache-manager.sar/**"/>
         <include name="lib/jbosscache-*"/>
         <include name="lib/hibernate-jbosscache2.jar"/>
-		<include name="lib/hibernate-ehcache.jar"/>
-		<include name="lib/hibernate-oscache.jar"/>
-		<include name="lib/hibernate-swarmcache.jar"/>
         <include name="lib/jgroups.jar"/>
       </fileset>
     </copy>
@@ -1110,9 +1113,15 @@ Please ensure that build.properties exists in the build dir of the checkout tree
     <move todir="${install.common.lib}">
       <fileset dir="${install.all.lib}">
         <exclude name="hibernate-jbosscache2.jar"/>
+        <!-- JBPAPP-3180. The other hibernate 2nd Level Cache integration
+             jars are allowed to move to commmon/lib because their classes 
+             were available in 'default' in EAP 4.x. Having them only in
+             'all' is an incompatibility. -->
+        <!--
 		<exclude name="hibernate-ehcache.jar"/>
 		<exclude name="hibernate-oscache.jar"/>
 		<exclude name="hibernate-swarmcache.jar"/>
+        -->
         <exclude name="jacorb.jar"/>
         <exclude name="jbosscache-core.jar"/>
         <exclude name="jbosscache-pojo.jar"/>
@@ -1190,9 +1199,6 @@ Please ensure that build.properties exists in the build dir of the checkout tree
         <include name="deploy/cluster/jboss-cache-manager.sar/**"/>
         <include name="lib/jbosscache-*"/>
         <include name="lib/hibernate-jbosscache2.jar"/>
-		<include name="lib/hibernate-ehcache.jar"/>
-		<include name="lib/hibernate-oscache.jar"/>
-		<include name="lib/hibernate-swarmcache.jar"/>
         <include name="lib/jgroups.jar"/>
         <exclude name="lib/bsf.jar"/>
         <exclude name="lib/bsh.jar"/>

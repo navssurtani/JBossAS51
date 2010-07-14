@@ -1,8 +1,15 @@
 // The Java2 security policy for EAP5 with signed jars
 // Install with -Djava.security.policy==server.policy.cert
-// and -Djboss.home.dir=path_to_jboss_distribution
+// -Djboss.home.dir=path_to_jboss_distribution
+// -Djboss.server.home.dir= path to the server distro (default, production etc)
 
+
+//********************************************************
+// Keystore should be where you have imported the Red Hat
+// Code Signing Public Key
+//********************************************************
 keystore "file:${java.home}/lib/security/cacerts";
+
 
 // ***************************************
 // Trusted core Java code
@@ -23,18 +30,26 @@ grant codeBase "file:${java.home}/../lib/*" {
 // Trusted core JBoss code
 //***************************************
 grant codeBase "file:${jboss.home.dir}/bin/run.jar" {
-   permission java.security.AllPermission;
+  permission java.security.AllPermission;
 };
 
 grant signedBy "jboss" {
    permission java.security.AllPermission;
 };
 
+//**************************************************************************************************
+// Permissions to selected set of jars that are not signed
+//**************************************************************************************************
+
 grant codeBase "file:${jboss.server.home.dir}/deploy/quartz-ra.rar/-" {
  permission java.security.AllPermission;
 };
 
-grant codeBase "file:${jboss.home.dir}/server/default/deploy/uuid-key-generator.sar/-" {
+grant codeBase "jar:file:${jboss.server.home.dir}/deploy/quartz-ra.rar!/quartz-ra.jar" {
+ permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jboss.server.home.dir}/deploy/uuid-key-generator.sar/-" {
    permission javax.management.MBeanTrustPermission "register";
    permission javax.management.MBeanPermission "*", "getAttribute";
    permission org.jboss.naming.JndiPermission "<<ALL BINDINGS>>","lookup,rebind,unbind";
@@ -46,6 +61,7 @@ grant codeBase "file:${jboss.server.home.dir}/deploy/http-invoker.sar/invoker.wa
    permission javax.management.MBeanServerPermission "findMBeanServer";
    permission java.lang.RuntimePermission "getClassLoader";
 };
+
 
 
 //****************************************************************

@@ -12,5 +12,6 @@
    <url>bootstrap/jmx.xml</url>
    <url>bootstrap/deployers.xml</url>
    <url>bootstrap/profile.xml</url>
+   <url>bootstrap/security.xml</url>
 
 </bootstrap>

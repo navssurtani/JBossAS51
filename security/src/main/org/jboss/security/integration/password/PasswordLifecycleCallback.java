@@ -21,14 +21,20 @@
  */
 package org.jboss.security.integration.password;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import org.jboss.aop.joinpoint.Invocation;
 import org.jboss.aop.joinpoint.MethodInvocation;
+import org.jboss.beans.metadata.spi.AnnotationMetaData;
+import org.jboss.beans.metadata.spi.BeanMetaData;
 import org.jboss.dependency.spi.ControllerContext;
+import org.jboss.kernel.plugins.dependency.AbstractKernelControllerContext;
 import org.jboss.kernel.spi.dependency.KernelControllerContext;
 import org.jboss.logging.Logger;
-import org.jboss.metadata.spi.MetaData;
 
 /**
  * AOP Lifecycle callback for the @Password annotation
@@ -94,39 +100,51 @@ public class PasswordLifecycleCallback
    public void install(ControllerContext context) throws Exception
    {
       //Get the password
-      Password passwordAnnotation = readPasswordAnnotation(context);
-      boolean trace = log.isTraceEnabled();
-      if( trace )
-         log.trace("Binding into JNDI: " + context.getName() + ", passwordInfo: " + passwordAnnotation);
-      
-      String securityDomain = passwordAnnotation.securityDomain();
-      
-      char[] passwd = this.passwordManagement.getPassword(securityDomain);
-      
-      if(passwd == null)
-         log.trace("Password does not exist for security domain=" + securityDomain);
-      //The bean in question is the target
-      String methodName = passwordAnnotation.methodName();
-      Object target = context.getTarget(); 
-      if(trace)
+      List<Password> passwordAnnotations = readPasswordAnnotation(context);
+      for (Password passwordAnnotation : passwordAnnotations)
       {
-         log.trace("Trying to set password on " + target + " with method :" + methodName);
+
+         boolean trace = log.isTraceEnabled();
+         if (trace)
+            log.trace("Binding into JNDI: " + context.getName() + ", passwordInfo: " + passwordAnnotation);
+
+         String securityDomain = passwordAnnotation.securityDomain();
+
+         char[] passwd = this.passwordManagement.getPassword(securityDomain);
+
+         if (passwd == null)
+            log.trace("Password does not exist for security domain=" + securityDomain);
+         //The bean in question is the target
+         String methodName = passwordAnnotation.methodName();
+         Object target = context.getTarget();
+         if (trace)
+         {
+            log.trace("Trying to set password on " + target + " with method :" + methodName);
+         }
+         this.setPassword(target, passwordAnnotation, passwd);
       }
-      this.setPassword(target, passwordAnnotation, passwd);
    }
    
    public void uninstall(ControllerContext context) throws Exception
    {
       //ignore
    }
-
    
-   private Password readPasswordAnnotation(ControllerContext context) throws Exception
+   private List<Password> readPasswordAnnotation(ControllerContext context) throws Exception
    {
-      MetaData metaData = context.getScopeInfo().getMetaData();
-      if (metaData != null)
-         return metaData.getAnnotation(Password.class);
-      return null;
+      List<Password> passwordAnnotations = new ArrayList<Password>();
+      AbstractKernelControllerContext akcc = (AbstractKernelControllerContext) context;
+      BeanMetaData bmd = akcc.getBeanMetaData();
+      Set<AnnotationMetaData> annotations = bmd.getAnnotations();
+      for (AnnotationMetaData annotationMetaData : annotations)
+      {
+         Annotation annotation = annotationMetaData.getAnnotationInstance();
+         if (annotation.annotationType() == Password.class)
+         {
+            passwordAnnotations.add((Password) annotation);
+         }
+      }
+      return passwordAnnotations;
    }
    
    private void setPassword(Object target, Password passwordAnnotation, char[] passwd) throws Exception
