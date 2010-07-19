@@ -321,6 +321,14 @@ Please ensure that build.properties exists in the build dir of the checkout tree
     <property name="install.standard.deploy" value="${install.standard}/deploy"/>
     <property name="install.standard.deployers" value="${install.standard}/deployers"/>
     <property name="install.standard.conf" value="${install.standard}/conf"/>
+
+    <!-- Directory structure for the datagrid profile -->
+    <property name="install.datagrid" value="${install.server}/datagrid"/>
+    <property name="install.datagrid.lib" value="${install.datagrid}/lib"/>
+    <property name="install.datagrid.deploy" value="${install.datagrid}/deploy"/>
+    <property name="install.datagrid.deployers" value="${install.datagrid}/deployers"/>
+    <property name="install.datagrid.conf" value="${install.datagrid}/conf"/>
+
     
     <!-- libs shared by the server configurations -->
     <property name="install.common" value="${install.root}/common"/>
@@ -1022,6 +1030,58 @@ Please ensure that build.properties exists in the build dir of the checkout tree
     </copy>
     <copy todir="${install.minimal.lib}"
       file="${project.root}/server/output/lib/jboss-minimal.jar" />
+
+    <!-- Build datagrid manually -->
+    <mkdir dir="${install.datagrid.deploy}"/>
+    <mkdir dir="${install.datagrid.deployers}"/>
+    <copy todir="${install.datagrid.conf}">
+      <fileset dir="${install.default.conf}">
+        <include name="jndi.properties"/>
+        <include name="jboss-log4j.xml"/>
+        <exclude name="jboss-log4j-production.xml"/>
+        <include name="bootstrap/classloader.xml"/>
+        <include name="bootstrap/aop.xml"/>
+        <include name="bootstrap/jmx.xml"/>
+        <include name="bootstrap/deployers.xml"/>
+        <include name="bootstrap/profile.xml"/>
+        <include name="bootstrap/security.xml"/>
+        <include name="xmdesc/NamingBean-xmbean.xml"/>
+        <include name="xmdesc/NamingService-xmbean.xml"/>
+        <include name="xmdesc/NamingProviderURLWriter-xmbean.xml"/>
+        <include name="xmdesc/Log4jService-xmbean.xml"/>          
+      </fileset>
+    </copy>
+    <copy todir="${install.datagrid.conf}" overwrite="true">
+      <fileset dir="${project.root}/server/output/etc/conf/datagrid"/>
+    </copy>
+    <copy file="${project.root}/profileservice/output/resources/hdscanner-jboss-beans.xml" 
+          todir="${install.datagrid.deploy}" overwrite="true"/>
+
+	<!-- Copying configuration files needed for the datagrid profile -->
+
+	<copy file="${project.root}/datagrid/datagrid-jboss-beans.xml"
+		  todir="${install.datagrid.conf}" overwrite="true" />
+
+	<copy file="${project.root}/datagrid/infinispan-configuration.xml"
+		  todir="${install.datagrid.conf}" overwrite="true" />
+
+	<!-- Copying properties files needed for the datagrid profile -->
+
+	<copy file="${project.root}/datagrid/datagrid-endpoint-hotrod.properties"
+		  todir="${install.datagrid.conf}" overwrite="true" />
+
+	<copy file="${project.root}/datagrid/datagrid-endpoint-memcached.properties"
+		  todir="${install.datagrid.conf}" overwrite="true" />
+		
+    <copy todir="${install.datagrid.lib}">
+      <fileset dir="${install.common.lib}">
+        <include name="jnpserver.jar" />
+        <include name="log4j.jar" />
+      </fileset>
+    </copy>
+    <copy todir="${install.datagrid.lib}"
+      file="${project.root}/server/output/lib/jboss-minimal.jar" />
+
 
     <!-- Build standard config manually -->
     <copy todir="${install.standard}">
