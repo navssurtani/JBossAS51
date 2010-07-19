@@ -216,6 +216,8 @@ public class JNDIBasedSecurityManagement implements ISecurityManagement
          if(am == null)
          {
             am = (MappingManager) lookUpJNDI(securityDomain + "/mappingMgr");
+            if(am == null)
+              am = createMappingManager(securityDomain);
             this.mappingMgrMap.put(securityDomain, am); 
          }
       }

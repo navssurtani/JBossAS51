@@ -577,18 +577,17 @@
 
     <!-- Copy the generated deployment libraries -->
     <mkdir dir="${install.server}/all/deploy"/>
+    <unjar src="${_module.output}/lib/jboss-local-jdbc.rar" dest="${install.server}/all/deploy/jboss-local-jdbc.rar"/>
+    <unjar src="${_module.output}/lib/jboss-xa-jdbc.rar" dest="${install.server}/all/deploy/jboss-xa-jdbc.rar"/>
+    <unjar src="${_module.output}/lib/mail-ra.rar" dest="${install.server}/all/deploy/mail-ra.rar"/>
+    <unjar src="${_module.output}/lib/quartz-ra.rar" dest="${install.server}/all/deploy/quartz-ra.rar"/>
     <copy todir="${install.server}/all/deploy" filtering="no">
-      <fileset dir="${_module.output}/lib">
-        <include name="jboss-local-jdbc.rar"/>
-        <include name="jboss-xa-jdbc.rar"/>
-        <include name="mail-ra.rar"/>
-        <include name="quartz-ra.rar"/>
-      </fileset>
       <fileset dir="${_module.output}/resources/jca-sar">
         <include name="jca-jboss-beans.xml"/>
         <include name="jca-jboss-beans-production.xml"/>
       </fileset>
     </copy>
+    <unjar src="${_module.output}/lib/jms-ra.rar" dest="${install.all.deploy}/jms-ra.rar"/>
     <copy todir="${install.all.deploy}" filtering="no">
       <fileset dir="${_module.output}/lib">
         <include name="jms-ra.rar"/>
