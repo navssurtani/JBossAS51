@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+	
+	<bean name="DefaultCacheManager" class="org.infinispan.manager.DefaultCacheManager">
+		<constructor>
+			<parameter class="java.lang.String">infinispan-configuration.xml</parameter>
+		</constructor>							
+	</bean>
+	
+	
+	<bean name="HotRodServer" class="org.infinispan.server.hotrod.HotRodServer">
+		<install method="start">
+			<parameter class="java.util.Properties">
+				<map class="java.util.Properties" keyClass="java.lang.String" valueClass="java.lang.String" name="">
+					<entry>
+						<key>infinispan.server.host</key>
+						<value>127.0.0.1</value>
+					</entry>
+					<entry>
+						<key>infinispan.server.port</key>
+						<value>11311</value>
+					</entry>
+				</map>								
+			</parameter>			
+			<!-- <parameter class="java.lang.String">datagrid-endpoint-hotrod.properties</parameter> -->
+			<parameter class="org.infinispan.manager.EmbeddedCacheManager"><inject bean="DefaultCacheManager" /></parameter>			
+		</install>				
+	</bean>
+
+
+	<bean name="MemcachedServer" class="org.infinispan.server.memcached.MemcachedServer">
+		<install method="start">
+			<parameter class="java.util.Properties">
+				<map class="java.util.Properties" keyClass="java.lang.String" valueClass="java.lang.String">
+					<entry>
+						<key>infinispan.server.host</key>
+						<value>127.0.0.1</value>
+					</entry>
+					<entry>
+						<key>infinispan.server.port</key>
+						<value>11211</value>
+					</entry>
+				</map>				
+			</parameter>			
+			<!-- <parameter class="java.lang.String">datagrid-endpoint-memcached.properties</parameter> -->
+			<parameter class="org.infinispan.manager.EmbeddedCacheManager"><inject bean="DefaultCacheManager" /></parameter>			
+		</install>				
+	</bean>
+	
+
+</deployment>
