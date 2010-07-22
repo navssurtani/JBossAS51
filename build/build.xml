@@ -145,6 +145,8 @@ Please ensure that build.properties exists in the build dir of the checkout tree
       <module name="tomcat"/>
       <module name="varia"/>
       <module name="webservices"/>
+	  <!-- Datagrid module -->
+	  <module name="datagrid"/>
 
       <!-- Module groups -->
 
@@ -198,6 +200,10 @@ Please ensure that build.properties exists in the build dir of the checkout tree
       <group name="default">
         <include groups="core, basic, standard"/>
       </group>
+	
+	  <group name="datagrid">
+		<include modules="datagrid" groups="core, basic"/>
+	  </group>
 
       <group name="most">
         <include groups="core, basic, standard"/>
@@ -1052,7 +1058,7 @@ Please ensure that build.properties exists in the build dir of the checkout tree
       </fileset>
     </copy>
     <copy todir="${install.datagrid.conf}" overwrite="true">
-      <fileset dir="${project.root}/server/output/etc/conf/datagrid"/>
+      <fileset dir="${project.root}/server/output/etc/conf/minimal"/>
     </copy>
     <copy file="${project.root}/profileservice/output/resources/hdscanner-jboss-beans.xml" 
           todir="${install.datagrid.deploy}" overwrite="true"/>
