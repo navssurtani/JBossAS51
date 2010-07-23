@@ -815,7 +815,8 @@
      <property name="_module.output" override="true" value="${project.root}/${_module.name}/output"/>
       <mkdir dir="${install.root}"/>
       <mkdir dir="${install.root}/extras"/>
-      <mkdir dir="${install.root}/extras/hornetq"/>                                                                                    
+      <mkdir dir="${install.root}/extras/hornetq"/>
+
       <copy todir="${install.root}/extras/hornetq">
          <fileset dir="${_module.output}/">
              <include name="resources/*.xml"/>
@@ -859,6 +860,87 @@
    </target>
 
    <target name="_module-hornetq-int-all"></target>
+
+	<!-- ======== -->
+	<!-- Datagrid -->
+	<!-- ======== -->
+
+	<!-- Define the directory where the datagrid profile will sit -->
+	<target name="_module-datagrid-most">
+	<property name="_module.name" value="datagrid" override="true"/>
+	<property name="_module.output" value="${project.root}/{_module.name}/output"/>
+	<mkdir dir="{install.root}"/>
+	<mkdir dir="{install.root}/extras"/>
+	<mkdir dir="{install.root}extras/datagrid"/>
+
+	
+	<!-- Directory structure for the datagrid profile -->
+	<property name="_install.datagrid" value="${install.root}/extras/datagrid"/>
+	<property name="_install.datagrid.lib" value="${_install.datagrid}/lib"/>
+	<property name="_install.datagrid.deploy" value="${_install.datagrid}/deploy"/>
+	<property name="_install.datagrid.deployers" value="${_install.datagrid}/deployers"/>
+	<property name="_install.datagrid.conf" value="${_install.datagrid}/conf"/>
+
+    <!-- Build datagrid manually -->
+    <mkdir dir="${_install.datagrid.deploy}"/>
+    <mkdir dir="${_install.datagrid.deployers}"/>
+    <mkdir dir="${_install.datagrid.conf}"/>
+    
+    <copy todir="${_install.datagrid.conf}">
+      <fileset dir="${install.default.conf}">
+        <include name="jndi.properties"/>
+        <include name="jboss-log4j.xml"/>
+        <exclude name="jboss-log4j-production.xml"/>
+        <include name="bootstrap/classloader.xml"/>
+        <include name="bootstrap/aop.xml"/>
+        <include name="bootstrap/jmx.xml"/>
+        <include name="bootstrap/deployers.xml"/>
+        <include name="bootstrap/profile.xml"/>
+        <include name="bootstrap/security.xml"/>
+        <include name="xmdesc/NamingBean-xmbean.xml"/>
+        <include name="xmdesc/NamingService-xmbean.xml"/>
+        <include name="xmdesc/NamingProviderURLWriter-xmbean.xml"/>
+        <include name="xmdesc/Log4jService-xmbean.xml"/>          
+      </fileset>
+    </copy>
+    
+    <copy todir="${_install.datagrid.conf}" overwrite="true">
+      <fileset dir="${project.root}/server/output/etc/conf/minimal"/>
+    </copy>
+    <copy file="${project.root}/profileservice/output/resources/hdscanner-jboss-beans.xml" 
+          todir="${_install.datagrid.deploy}" overwrite="true"/>
+
+	<!-- Copying configuration files needed for the datagrid profile -->
+
+	<copy file="${project.root}/datagrid/datagrid-jboss-beans.xml"
+		  todir="${install.datagrid.conf}" overwrite="true" />
+
+	<copy file="${project.root}/datagrid/infinispan-configuration.xml"
+		  todir="${install.datagrid.conf}" overwrite="true" />
+
+	<!-- Copying properties files needed for the datagrid profile -->
+
+	<copy file="${project.root}/datagrid/datagrid-endpoint-hotrod.properties"
+		  todir="${install.datagrid.conf}" overwrite="true" />
+
+	<copy file="${project.root}/datagrid/datagrid-endpoint-memcached.properties"
+		  todir="${install.datagrid.conf}" overwrite="true" />
+		
+    <copy todir="${install.datagrid.lib}">
+      <fileset dir="${install.common.lib}">
+        <include name="jnpserver.jar" />
+        <include name="log4j.jar" />
+      </fileset>
+    </copy>
+    <copy todir="${install.datagrid.lib}"
+      file="${project.root}/server/output/lib/jboss-minimal.jar" />
+
+
+
+	</target>
+
+   <target name="_module-datagrid-all"></target>
+		
    
   <!-- ==== -->
   <!-- J2SE -->
