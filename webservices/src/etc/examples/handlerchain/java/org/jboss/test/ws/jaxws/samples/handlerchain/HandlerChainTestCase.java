@@ -38,6 +38,7 @@ import org.jboss.wsf.test.JBossWSTestSetup;
 /**
  * Test the JSR-181 annotation: javax.jws.HandlerChain
  *
+ * @author <a href="mailto:ropalka@redhat.com">Richard Opalka</a>
  * @author Thomas.Diesler@jboss.org
  * @since 15-Oct-2005
  */
@@ -50,6 +51,7 @@ public class HandlerChainTestCase extends JBossWSTest
       return new JBossWSTestSetup(HandlerChainTestCase.class, "jaxws-samples-handlerchain.war");
    }
 
+   @SuppressWarnings("unchecked")
    public void testDynamicHandlerChain() throws Exception
    {
       QName serviceName = new QName(targetNS, "EndpointImplService");
@@ -57,7 +59,7 @@ public class HandlerChainTestCase extends JBossWSTest
 
       Service service = Service.create(wsdlURL, serviceName);
       Endpoint port = (Endpoint)service.getPort(Endpoint.class);
-      
+
       BindingProvider bindingProvider = (BindingProvider)port;
       List<Handler> handlerChain = new ArrayList<Handler>();
       handlerChain.add(new LogHandler());
@@ -65,46 +67,27 @@ public class HandlerChainTestCase extends JBossWSTest
       handlerChain.add(new RoutingHandler());
       handlerChain.add(new ClientMimeHandler());
       bindingProvider.getBinding().setHandlerChain(handlerChain);
-      
+
       String resStr = port.echo("Kermit");
       assertEquals("Kermit|LogOut|AuthOut|RoutOut|RoutIn|AuthIn|LogIn|endpoint|LogOut|AuthOut|RoutOut|RoutIn|AuthIn|LogIn", resStr);
-      
-      if (isIntegrationMetro())
-      {
-         System.out.println("FIXME: [JBWS-1671] Metro client handler cannot set mime header");
-         return;
-      }
-      if (isIntegrationCXF())
-      {
-         System.out.println("FIXME: [CXF-1507] CXF client handler cannot set mime header");
-         return;
-      }
-
-      assertEquals("server-cookie=true", ClientMimeHandler.inboundCookie);
+      assertCookies();
    }
 
-   public void testHandlerChainOnServiceEndpointInterface() throws Exception
+   public void testHandlerChainOnService() throws Exception
    {
       QName serviceName = new QName(targetNS, "EndpointImplService");
       URL wsdlURL = new URL("http://" + getServerHost() + ":8080/jaxws-samples-handlerchain/TestService?wsdl");
 
-      Service service = Service.create(wsdlURL, serviceName);
+      Service service = new EndpointWithHandlerChainService(wsdlURL, serviceName);
       EndpointWithHandlerChain port = (EndpointWithHandlerChain)service.getPort(EndpointWithHandlerChain.class);
-      
-      if (isIntegrationMetro())
-      {
-         System.out.println("FIXME: [JBWS-1672] Metro does not respect @HandlerChain on client SEI");
-      }
-      else if (isIntegrationCXF())
-      {
-         System.out.println("FIXME: [CXF-1253] CXF does not respect @HandlerChain on client SEI");
-      }
-      else
-      {
-         String resStr = port.echo("Kermit");
-         assertEquals("Kermit|LogOut|AuthOut|RoutOut|RoutIn|AuthIn|LogIn|endpoint|LogOut|AuthOut|RoutOut|RoutIn|AuthIn|LogIn", resStr);
-      }
-      
+
+      String resStr = port.echo("Kermit");
+      assertEquals("Kermit|LogOut|AuthOut|RoutOut|RoutIn|AuthIn|LogIn|endpoint|LogOut|AuthOut|RoutOut|RoutIn|AuthIn|LogIn", resStr);
+      assertCookies();
+   }
+
+   private void assertCookies() throws Exception
+   {
       if (isIntegrationMetro())
       {
          System.out.println("FIXME: [JBWS-1671] Metro client handler cannot set mime header");

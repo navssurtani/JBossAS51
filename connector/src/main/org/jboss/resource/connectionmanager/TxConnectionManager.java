@@ -26,6 +26,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.management.ObjectName;
@@ -131,6 +133,8 @@ public class TxConnectionManager extends BaseConnectionManager2 implements TxCon
 {
    private static final Throwable FAILED_TO_ENLIST = new Throwable("Unabled to enlist resource, see the previous warnings."); 
 
+   private static final ConcurrentMap<Integer, Integer> SUCCEED_STATUS;
+
    private ObjectName transactionManagerService;
    
    //use the object name, please
@@ -174,6 +178,12 @@ public class TxConnectionManager extends BaseConnectionManager2 implements TxCon
       }
 
       IGNORE_STATUS_MARKED_FOR_ROLLBACK = value;
+
+      SUCCEED_STATUS = new ConcurrentHashMap<Integer, Integer>(4);
+      SUCCEED_STATUS.put(Integer.valueOf(Status.STATUS_ACTIVE), Integer.valueOf(Status.STATUS_ACTIVE));
+      SUCCEED_STATUS.put(Integer.valueOf(Status.STATUS_PREPARING), Integer.valueOf(Status.STATUS_PREPARING));
+      SUCCEED_STATUS.put(Integer.valueOf(Status.STATUS_PREPARED), Integer.valueOf(Status.STATUS_PREPARED));
+      SUCCEED_STATUS.put(Integer.valueOf(Status.STATUS_COMMITTING), Integer.valueOf(Status.STATUS_COMMITTING));
    }
 
    protected static void rethrowAsSystemException(String context, Transaction tx, Throwable t)
@@ -353,9 +363,9 @@ public class TxConnectionManager extends BaseConnectionManager2 implements TxCon
       Transaction tx = tm.getTransaction();
       if (tx != null)
       {
-         int status = tx.getStatus();
+         Integer status = Integer.valueOf(tx.getStatus());
          // Only allow states that will actually succeed
-         if (status != Status.STATUS_ACTIVE && status != Status.STATUS_PREPARING && status != Status.STATUS_PREPARED && status != Status.STATUS_COMMITTING)
+         if (!SUCCEED_STATUS.containsKey(status))
          {
             if (status == Status.STATUS_MARKED_ROLLBACK && IGNORE_STATUS_MARKED_FOR_ROLLBACK)
                ;  // allow database access even though transaction is marked to fail 

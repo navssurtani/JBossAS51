@@ -21,12 +21,20 @@
  */
 package org.jboss.test.ws.jaxws.samples.handlerchain;
 
-import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
+import java.net.URL;
 
-@WebService(name="Endpoint")
-@SOAPBinding(style = SOAPBinding.Style.RPC)
-public interface EndpointWithHandlerChain
+import javax.jws.HandlerChain;
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
+
+/**
+ * @author <a href="mailto:ropalka@redhat.com">Richard Opalka</a>
+ */
+@HandlerChain(file = "jaxws-handlers-client.xml")
+public class EndpointWithHandlerChainService extends Service
 {
-   public String echo(String input);
+   public EndpointWithHandlerChainService(URL wsdlLocation, QName serviceName)
+   {
+      super(wsdlLocation, serviceName);
+   }
 }

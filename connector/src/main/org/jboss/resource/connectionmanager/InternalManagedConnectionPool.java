@@ -202,9 +202,10 @@ public class InternalManagedConnectionPool implements IdleConnectionRemovalSuppo
                      throw new RetryableResourceException("The pool has been shutdown");
                   }
 
-                  if (cls.size() > 0)
+                  int clsSize = cls.size();
+                  if (clsSize > 0)
                   {
-                     cl = (ConnectionListener) cls.remove(cls.size() - 1);
+                     cl = (ConnectionListener) cls.remove(clsSize - 1);
                      checkedOut.add(cl);
                      int size = (int) (maxSize - permits.availablePermits());
                      if (size > maxUsedConnections)

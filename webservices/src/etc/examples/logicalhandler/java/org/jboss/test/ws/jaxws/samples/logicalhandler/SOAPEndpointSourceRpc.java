@@ -21,14 +21,12 @@
  */
 package org.jboss.test.ws.jaxws.samples.logicalhandler;
 
-import javax.jws.HandlerChain;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.Style;
 
 @WebService(name = "SOAPEndpointRpc", targetNamespace = "http://org.jboss.ws/jaxws/samples/logicalhandler")
-@HandlerChain(file = "jaxws-client-source-handlers.xml")
 @SOAPBinding(style = Style.RPC)
 public interface SOAPEndpointSourceRpc
 {

@@ -55,6 +55,6 @@ public class PingEndpointImpl
    public String feedback()
    {
       log.info("feedback");
-      return "result: " + feedback;
+      return "result: ok";
    }
 }

@@ -34,7 +34,7 @@
     <version.jacorb>2.3.1jboss.patch01</version.jacorb>
     <version.javax.faces>1.2_13</version.javax.faces>
     <version.jboss.jaxr>2.0.1</version.jboss.jaxr>
-    <version.jboss.jbossts>4.6.1.GA_CP05</version.jboss.jbossts>
+    <version.jboss.jbossts>4.6.1.GA_CP06</version.jboss.jbossts>
     <version.jboss.jbossws-common>1.1.0.SP6</version.jboss.jbossws-common>
     <version.jboss.jbossws-framework>3.1.2.SP7</version.jboss.jbossws-framework>
     <version.jboss.jbossws-spi>1.1.2.SP4</version.jboss.jbossws-spi>

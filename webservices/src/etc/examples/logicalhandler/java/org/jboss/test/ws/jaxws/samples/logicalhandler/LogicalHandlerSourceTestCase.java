@@ -46,86 +46,32 @@ public class LogicalHandlerSourceTestCase extends JBossWSTest
 
    public void testSourceDoc() throws Exception
    {
-      String endpointAddress = "http://" + getServerHost() + ":8080/jaxws-samples-logicalhandler-source/doc";
+      URL endpointAddress = new URL("http://" + getServerHost() + ":8080/jaxws-samples-logicalhandler-source/doc?wsdl");
       QName serviceName = new QName("http://org.jboss.ws/jaxws/samples/logicalhandler", "SOAPEndpointDocService");
-      Service service = Service.create(new URL(endpointAddress + "?wsdl"), serviceName);
+      Service service = new SOAPEndpointSourceService(endpointAddress, serviceName);
       SOAPEndpointSourceDoc port = (SOAPEndpointSourceDoc)service.getPort(SOAPEndpointSourceDoc.class);
       
       String retStr = port.echo("hello");
-      
-      StringBuffer expStr = new StringBuffer("hello");
-      if (isIntegrationNative())
-      {
-         expStr.append(":Outbound:LogicalSourceHandler");
-         expStr.append(":Outbound:ProtocolHandler");
-         expStr.append(":Outbound:PortHandler");
-      }
-      else
-      {
-         if (isIntegrationMetro())
-         {
-            System.out.println("FIXME: [JBWS-1672] Metro does not respect @HandlerChain on client SEI");
-         }
-         else
-         {
-            System.out.println("FIXME: [CXF-1253] CXF does not respect @HandlerChain on client SEI");
-         }
-      }
-      expStr.append(":Inbound:PortHandler");
-      expStr.append(":Inbound:ProtocolHandler");
-      expStr.append(":Inbound:LogicalSourceHandler");
-      expStr.append(":endpoint");
-      expStr.append(":Outbound:LogicalSourceHandler");
-      expStr.append(":Outbound:ProtocolHandler");
-      expStr.append(":Outbound:PortHandler");
-      if (isIntegrationNative())
-      {
-         expStr.append(":Inbound:PortHandler");
-         expStr.append(":Inbound:ProtocolHandler");
-         expStr.append(":Inbound:LogicalSourceHandler");
-      }
-      else
-      {
-         if (isIntegrationMetro())
-         {
-            System.out.println("FIXME: [JBWS-1672] Metro does not respect @HandlerChain on client SEI");
-         }
-         else
-         {
-            System.out.println("FIXME: [CXF-1253] CXF does not respect @HandlerChain on client SEI");
-         }
-      }
-      assertEquals(expStr.toString(), retStr);
+      assertResponse(retStr);
    }
-
 
    public void testSourceRpc() throws Exception
    {
-      String endpointAddress = "http://" + getServerHost() + ":8080/jaxws-samples-logicalhandler-source/rpc";
+      URL endpointAddress = new URL("http://" + getServerHost() + ":8080/jaxws-samples-logicalhandler-source/rpc?wsdl");
       QName serviceName = new QName("http://org.jboss.ws/jaxws/samples/logicalhandler", "SOAPEndpointRpcService");
-      Service service = Service.create(new URL(endpointAddress + "?wsdl"), serviceName);
+      Service service = new SOAPEndpointSourceService(endpointAddress, serviceName);
       SOAPEndpointSourceRpc port = (SOAPEndpointSourceRpc)service.getPort(SOAPEndpointSourceRpc.class);
       
       String retStr = port.echo("hello");
-      
+      assertResponse(retStr);
+   }
+   
+   private void assertResponse(String retStr)
+   {
       StringBuffer expStr = new StringBuffer("hello");
-      if (isIntegrationNative())
-      {
-         expStr.append(":Outbound:LogicalSourceHandler");
-         expStr.append(":Outbound:ProtocolHandler");
-         expStr.append(":Outbound:PortHandler");
-      }
-      else
-      {
-         if (isIntegrationMetro())
-         {
-            System.out.println("FIXME: [JBWS-1672] Metro does not respect @HandlerChain on client SEI");
-         }
-         else
-         {
-            System.out.println("FIXME: [CXF-1253] CXF does not respect @HandlerChain on client SEI");
-         }
-      }
+      expStr.append(":Outbound:LogicalSourceHandler");
+      expStr.append(":Outbound:ProtocolHandler");
+      expStr.append(":Outbound:PortHandler");
       expStr.append(":Inbound:PortHandler");
       expStr.append(":Inbound:ProtocolHandler");
       expStr.append(":Inbound:LogicalSourceHandler");
@@ -133,23 +79,9 @@ public class LogicalHandlerSourceTestCase extends JBossWSTest
       expStr.append(":Outbound:LogicalSourceHandler");
       expStr.append(":Outbound:ProtocolHandler");
       expStr.append(":Outbound:PortHandler");
-      if (isIntegrationNative()) 
-      {
-         expStr.append(":Inbound:PortHandler");
-         expStr.append(":Inbound:ProtocolHandler");
-         expStr.append(":Inbound:LogicalSourceHandler");
-      }
-      else
-      {
-         if (isIntegrationMetro())
-         {
-            System.out.println("FIXME: [JBWS-1672] Metro does not respect @HandlerChain on client SEI");
-         }
-         else
-         {
-            System.out.println("FIXME: [CXF-1253] CXF does not respect @HandlerChain on client SEI");
-         }
-      }
+      expStr.append(":Inbound:PortHandler");
+      expStr.append(":Inbound:ProtocolHandler");
+      expStr.append(":Inbound:LogicalSourceHandler");
       assertEquals(expStr.toString(), retStr);
    }
 }

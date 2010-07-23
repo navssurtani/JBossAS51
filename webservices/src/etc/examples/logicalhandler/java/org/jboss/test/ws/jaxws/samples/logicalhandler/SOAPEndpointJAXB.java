@@ -21,7 +21,6 @@
  */
 package org.jboss.test.ws.jaxws.samples.logicalhandler;
 
-import javax.jws.HandlerChain;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
@@ -30,14 +29,11 @@ import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
 @WebService(name = "SOAPEndpoint", targetNamespace = "http://org.jboss.ws/jaxws/samples/logicalhandler")
-@HandlerChain(file = "jaxws-client-jaxb-handlers.xml")
 public interface SOAPEndpointJAXB
 {
-
    @WebMethod
    @WebResult(targetNamespace = "http://org.jboss.ws/jaxws/samples/logicalhandler", name = "result")
    @RequestWrapper(className = "org.jboss.test.ws.jaxws.samples.logicalhandler.Echo")
    @ResponseWrapper(className = "org.jboss.test.ws.jaxws.samples.logicalhandler.EchoResponse")
    public String echo(@WebParam(targetNamespace = "http://org.jboss.ws/jaxws/samples/logicalhandler", name="String_1") String string1);
-
 }

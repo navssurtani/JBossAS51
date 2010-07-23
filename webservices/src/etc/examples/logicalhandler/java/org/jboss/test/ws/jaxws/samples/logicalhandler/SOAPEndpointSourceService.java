@@ -19,14 +19,22 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.test.ws.jaxws.samples.handlerchain;
+package org.jboss.test.ws.jaxws.samples.logicalhandler;
 
-import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
+import java.net.URL;
 
-@WebService(name="Endpoint")
-@SOAPBinding(style = SOAPBinding.Style.RPC)
-public interface EndpointWithHandlerChain
+import javax.jws.HandlerChain;
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
+
+/**
+ * @author <a href="mailto:ropalka@redhat.com">Richard Opalka</a>
+ */
+@HandlerChain(file = "jaxws-client-source-handlers.xml")
+public class SOAPEndpointSourceService extends Service
 {
-   public String echo(String input);
+   public SOAPEndpointSourceService(URL wsdlLocation, QName serviceName)
+   {
+      super(wsdlLocation, serviceName);
+   }
 }
